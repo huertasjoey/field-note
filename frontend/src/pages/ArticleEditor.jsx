@@ -38,7 +38,7 @@ function ArticleEditor() {
       <Link to="/admin" className="inline-flex items-center gap-1 text-sm text-muted hover:text-brand">
         <ArrowLeft size={14} aria-hidden="true" /> Manage articles
       </Link>
-      <h1 className="mb-6 mt-4 font-serif text-3xl font-bold">{id ? "Edit blog" : "Write a blog"}</h1>
+      <h1 className="mb-6 mt-4 font-serif text-3xl font-bold">{id ? "Edit blog" : "Upload a blog"}</h1>
       {body}
     </div>
   );

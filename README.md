@@ -4,8 +4,16 @@ Fieldnote is a full-stack editorial blog: a React front end backed by an Express
 article, category filtering, search, article pages, a newsletter signup stored in MongoDB, and a simple admin page for
 managing articles.
 
-> **Demo project.** There is **no authentication**. The `/admin` page and the write endpoints (`POST`, `PUT`, `DELETE`)
-> are open to anyone who can reach the server. Do not deploy this publicly as a real admin system.
+## Authentication
+
+Login/registration use server-side sessions in an HttpOnly cookie plus a CSRF token. Only administrators can use `/admin`
+or the write endpoints (`POST/PUT/DELETE /api/articles`); public registration always creates ordinary `user` accounts.
+
+1. In `backend/.env` set `ADMIN_EMAIL`, `ADMIN_PASSWORD` (8+ chars, upper/lower case, number) and optionally `ADMIN_NAME`.
+2. Run `npm run create-admin` in `backend`, then delete `ADMIN_PASSWORD` from `.env`.
+3. Log in at `/login`. Run backend tests with `npm test` in `backend`.
+
+Set `NODE_ENV=production` (HTTPS) when deploying; see `backend/.env.example`.
 
 ## Features
 
@@ -152,7 +160,7 @@ curl "http://localhost:5000/api/articles?category=Places&search=lisbon"
 
 ## Known limitations
 
-- No authentication or authorization; admin and write endpoints are public
+- No password reset or email verification
 - Images are external URLs only (no file uploads)
 - Article content is plain text with paragraph breaks (no Markdown or rich text)
 - Subscribers are stored but no emails are actually sent
@@ -169,7 +177,7 @@ curl "http://localhost:5000/api/articles?category=Places&search=lisbon"
 
 ## Security limitations and future improvements
 
-- Add authentication (e.g. JWT or sessions) and restrict `POST/PUT/DELETE` and `/admin` to authorised users
+- Add password reset and email verification
 - Add rate limiting (especially on the newsletter endpoint), request logging and security headers (`helmet`)
 - Sanitise or render rich content safely if Markdown/HTML support is added
 - Send confirmation emails (double opt-in) and add an unsubscribe flow

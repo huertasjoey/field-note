@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
-import { Menu, X, Plus } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Plus, LogOut } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
   { label: "Stories", to: "/#recent" },
@@ -20,7 +21,14 @@ function Logo() {
 }
 
 function Navbar() {
+  const { user, isAdmin, logout } = useAuth();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login", { replace: true });
+  }
   const { pathname } = useLocation();
   const [lastPath, setLastPath] = useState(pathname);
 
@@ -39,7 +47,7 @@ function Navbar() {
         <Logo />
 
         <div className="hidden items-center gap-1 md:flex">
-          {links.map((l) =>
+          {user && links.map((l) =>
             l.label === "About" ? (
               <NavLink key={l.label} to={l.to} className={linkClass}>
                 {l.label}
@@ -50,18 +58,45 @@ function Navbar() {
               </Link>
             ),
           )}
-          <Link
-            to="/admin/articles/new"
-            className="ml-3 inline-flex items-center gap-1 rounded-full border border-white/70 px-4 py-1.5 text-sm font-medium transition-colors hover:bg-white/15"
-          >
-            <Plus size={14} aria-hidden="true" /> Write a Blog
-          </Link>
+          {isAdmin && (
+            <>
+              <Link to="/admin" className="ml-2 rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/15">
+                Manage
+              </Link>
+              <Link
+                to="/admin/articles/new"
+                className="ml-1 inline-flex items-center gap-1 rounded-full border border-white/70 px-4 py-1.5 text-sm font-medium transition-colors hover:bg-white/15"
+              >
+                <Plus size={14} aria-hidden="true" /> Upload Blog
+              </Link>
+            </>
+          )}
+          {user ? (
+            <>
+              <span className="ml-2 max-w-32 truncate text-sm text-white/90" title={user.email}>
+                {user.name}
+              </span>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="ml-1 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/15"
+              >
+                <LogOut size={14} aria-hidden="true" /> Log out
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="ml-2 rounded-full px-3 py-1.5 text-sm transition-colors hover:bg-white/15">
+              Log in
+            </Link>
+          )}
+          {user && (
           <Link
             to="/#newsletter"
             className="ml-1 rounded-full bg-white px-5 py-1.5 text-sm font-medium text-brand transition-colors hover:bg-rose-100"
           >
             Subscribe
           </Link>
+          )}
         </div>
 
         <button
@@ -79,29 +114,55 @@ function Navbar() {
       {open && (
         <div id="mobile-menu" className="border-t border-white/20 px-4 pb-4 pt-2 md:hidden">
           <ul className="flex flex-col gap-1">
-            {links.map((l) => (
+            {user && links.map((l) => (
               <li key={l.label}>
                 <Link to={l.to} className="block rounded-lg px-3 py-2.5 hover:bg-white/15">
                   {l.label}
                 </Link>
               </li>
             ))}
-            <li className="pt-2">
-              <Link
-                to="/admin/articles/new"
-                className="flex items-center justify-center gap-1 rounded-full border border-white/70 px-5 py-2.5 font-medium hover:bg-white/15"
-              >
-                <Plus size={16} aria-hidden="true" /> Write a Blog
-              </Link>
+            {isAdmin && (
+              <>
+                <li>
+                  <Link to="/admin" className="block rounded-lg px-3 py-2.5 hover:bg-white/15">
+                    Manage articles
+                  </Link>
+                </li>
+                <li className="pt-2">
+                  <Link
+                    to="/admin/articles/new"
+                    className="flex items-center justify-center gap-1 rounded-full border border-white/70 px-5 py-2.5 font-medium hover:bg-white/15"
+                  >
+                    <Plus size={16} aria-hidden="true" /> Upload Blog
+                  </Link>
+                </li>
+              </>
+            )}
+            <li className={isAdmin ? "" : "pt-2"}>
+              {user ? (
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex w-full items-center justify-center gap-1 rounded-lg px-3 py-2.5 hover:bg-white/15"
+                >
+                  <LogOut size={16} aria-hidden="true" /> Log out ({user.name})
+                </button>
+              ) : (
+                <Link to="/login" className="block rounded-lg px-3 py-2.5 text-center hover:bg-white/15">
+                  Log in
+                </Link>
+              )}
             </li>
-            <li>
-              <Link
-                to="/#newsletter"
-                className="block rounded-full bg-white px-5 py-2.5 text-center font-medium text-brand hover:bg-rose-100"
-              >
-                Subscribe
-              </Link>
-            </li>
+            {user && (
+              <li>
+                <Link
+                  to="/#newsletter"
+                  className="block rounded-full bg-white px-5 py-2.5 text-center font-medium text-brand hover:bg-rose-100"
+                >
+                  Subscribe
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       )}

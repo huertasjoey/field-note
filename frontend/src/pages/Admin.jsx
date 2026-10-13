@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Eye, Pencil, Plus, Star, Trash2, TriangleAlert } from "lucide-react";
+import { Eye, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import { Loading, ErrorState, EmptyState } from "../components/StateMessage";
 import { useAsync } from "../hooks/useAsync";
 import { api } from "../lib/api";
@@ -91,17 +91,9 @@ function Admin() {
           to="/admin/articles/new"
           className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-dark"
         >
-          <Plus size={16} aria-hidden="true" /> Add Blog
+          <Plus size={16} aria-hidden="true" /> Upload Blog
         </Link>
       </div>
-
-      <p className="mt-4 flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-        <TriangleAlert size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
-        <span>
-          Demo only: this page and the write API endpoints have no authentication. Anyone who can reach them can change
-          your articles.
-        </span>
-      </p>
 
       {notice && (
         <p
@@ -119,7 +111,7 @@ function Admin() {
             {loading && <Loading label="Loading articles…" />}
             {error && <ErrorState message={error.message} onRetry={refresh} />}
             {data && data.articles.length === 0 && (
-              <EmptyState title="No articles yet">Click “Add Blog” to write your first one.</EmptyState>
+              <EmptyState title="No articles yet">Click “Upload Blog” to write your first one.</EmptyState>
             )}
             {data && data.articles.length > 0 && (
               <ul className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
