@@ -1,3 +1,5 @@
+const path = require("path");
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -14,9 +16,11 @@ const origins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
+if (process.env.RENDER_EXTERNAL_URL) origins.push(process.env.RENDER_EXTERNAL_URL.replace(/\/$/, ""));
 
-// Set TRUST_PROXY=1 behind a reverse proxy so rate limiting sees real client IPs.
-if (process.env.TRUST_PROXY) app.set("trust proxy", Number(process.env.TRUST_PROXY) || process.env.TRUST_PROXY);
+// Behind a reverse proxy (Render) the client IP comes from X-Forwarded-For; needed for rate limiting.
+const trustProxy = process.env.TRUST_PROXY || (process.env.NODE_ENV === "production" ? "1" : "");
+if (trustProxy) app.set("trust proxy", Number(trustProxy) || trustProxy);
 
 app.use(cors({ origin: origins, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
@@ -31,6 +35,13 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/newsletter", newsletterRoutes);
+
+// Production: serve the built React app from this same service (same origin => no CORS/cookie issues).
+const dist = path.join(__dirname, "..", "frontend", "dist");
+if (fs.existsSync(path.join(dist, "index.html"))) {
+  app.use(express.static(dist, { index: false, maxAge: "1h" }));
+  app.get(/^\/(?!api\/).*/, (req, res) => res.sendFile(path.join(dist, "index.html")));
+}
 
 app.use(notFound);
 app.use(errorHandler);

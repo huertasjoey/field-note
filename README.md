@@ -15,6 +15,19 @@ or the write endpoints (`POST/PUT/DELETE /api/articles`); public registration al
 
 Set `NODE_ENV=production` (HTTPS) when deploying; see `backend/.env.example`.
 
+## Deploying to Render
+
+One Render **Web Service** serves both the API and the built React site (same origin, so login cookies just work).
+
+1. Push this repo to GitHub. In Render choose **New > Blueprint** (uses `render.yaml`), or **New > Web Service** with
+   Build Command `npm run build`, Start Command `npm start`, Health Check Path `/api/health`.
+2. Set environment variables: `NODE_ENV=production` and `MONGO_URI` (your MongoDB Atlas string). Optional: `DB_NAME`.
+3. In Atlas **Network Access**, allow Render to connect (`0.0.0.0/0`, protected by your DB user and password).
+4. After the first deploy, run `npm run promote-admin -- you@example.com` (or `create-admin`) locally with the same
+   `MONGO_URI` in `backend/.env` to create or promote your admin account.
+
+Local dev is unchanged: `npm run dev` in `backend` and `frontend` separately.
+
 ## Features
 
 - Homepage with a featured hero article (from the database), recent stories grid, category filters, search and pagination

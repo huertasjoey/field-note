@@ -1,0 +1,18 @@
+# Render Blueprint: one web service serves the API and the built React site.
+services:
+  - type: web
+    name: fieldnote
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: DB_NAME
+        value: fieldnote
+      - key: MONGO_URI
+        sync: false # paste your MongoDB Atlas connection string in the Render dashboard

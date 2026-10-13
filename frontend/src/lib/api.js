@@ -1,5 +1,5 @@
 // Single place that knows where the API lives and how to talk to it.
-export const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, "");
+export const API_URL = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:5000/api" : "/api")).replace(/\/$/, "");
 
 // CSRF token for the current session. Kept in memory only (never localStorage); the session itself
 // lives in an HttpOnly cookie that JavaScript cannot read.

@@ -71,7 +71,13 @@ function csrfProtection(allowedOrigins) {
   return (req, res, next) => {
     if (SAFE_METHODS.has(req.method)) return next();
     const origin = req.get("origin");
-    if (origin && !allowedOrigins.includes(origin)) return next(new HttpError(403, "Request origin not allowed"));
+    let sameHost = false;
+    try {
+      sameHost = !!origin && new URL(origin).host === req.get("host"); // site served by this same service
+    } catch {
+      // malformed Origin => not allowed
+    }
+    if (origin && !sameHost && !allowedOrigins.includes(origin)) return next(new HttpError(403, "Request origin not allowed"));
     if (req.session) {
       const a = Buffer.from(req.get("x-csrf-token") || "");
       const b = Buffer.from(req.session.csrfToken);
