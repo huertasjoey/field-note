@@ -1,4 +1,4 @@
-const Article = require("../models/Article");
+import Article from "../models/Article.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -46,4 +46,4 @@ function escapeRegex(text) {
   return String(text).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-module.exports = { EMAIL_RE, slugify, uniqueSlug, estimateReadTime, isHttpUrl, escapeRegex };
+export { EMAIL_RE, slugify, uniqueSlug, estimateReadTime, isHttpUrl, escapeRegex };

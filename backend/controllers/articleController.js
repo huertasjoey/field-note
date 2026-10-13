@@ -1,8 +1,7 @@
-const mongoose = require("mongoose");
-const Article = require("../models/Article");
-const { CATEGORIES } = Article;
-const { HttpError } = require("../middleware/errorHandler");
-const { uniqueSlug, estimateReadTime, isHttpUrl, escapeRegex } = require("../utils/helpers");
+import mongoose from "mongoose";
+import Article, { CATEGORIES } from "../models/Article.js";
+import { HttpError } from "../middleware/errorHandler.js";
+import { uniqueSlug, estimateReadTime, isHttpUrl, escapeRegex } from "../utils/helpers.js";
 
 const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -40,7 +39,7 @@ async function clearOtherFeatured(exceptId) {
   await Article.updateMany({ featured: true, _id: { $ne: exceptId } }, { featured: false });
 }
 
-exports.listArticles = asyncHandler(async (req, res) => {
+export const listArticles = asyncHandler(async (req, res) => {
   const page = Math.max(1, parseInt(req.query.page, 10) || 1);
   const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 12));
   const filter = {};
@@ -68,7 +67,7 @@ exports.listArticles = asyncHandler(async (req, res) => {
   res.json({ articles, page, limit, total, totalPages: Math.max(1, Math.ceil(total / limit)) });
 });
 
-exports.getFeatured = asyncHandler(async (req, res) => {
+export const getFeatured = asyncHandler(async (req, res) => {
   const article =
     (await Article.findOne({ featured: true }).lean()) ||
     (await Article.findOne().sort({ createdAt: -1 }).lean());
@@ -77,7 +76,7 @@ exports.getFeatured = asyncHandler(async (req, res) => {
 });
 
 // Accepts either a MongoDB ObjectId or a slug
-exports.getArticle = asyncHandler(async (req, res) => {
+export const getArticle = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const article = mongoose.isValidObjectId(id)
     ? await Article.findById(id).lean()
@@ -86,7 +85,7 @@ exports.getArticle = asyncHandler(async (req, res) => {
   res.json(article);
 });
 
-exports.createArticle = asyncHandler(async (req, res) => {
+export const createArticle = asyncHandler(async (req, res) => {
   const data = validateArticle(req.body || {});
   data.slug = await uniqueSlug(data.title);
   data.readTime = estimateReadTime(data.content);
@@ -95,7 +94,7 @@ exports.createArticle = asyncHandler(async (req, res) => {
   res.status(201).json(article);
 });
 
-exports.updateArticle = asyncHandler(async (req, res) => {
+export const updateArticle = asyncHandler(async (req, res) => {
   const data = validateArticle(req.body || {}, true);
   const article = await Article.findById(req.params.id);
   if (!article) throw new HttpError(404, "Article not found");
@@ -108,7 +107,7 @@ exports.updateArticle = asyncHandler(async (req, res) => {
   res.json(article);
 });
 
-exports.deleteArticle = asyncHandler(async (req, res) => {
+export const deleteArticle = asyncHandler(async (req, res) => {
   const article = await Article.findByIdAndDelete(req.params.id);
   if (!article) throw new HttpError(404, "Article not found");
   res.json({ message: "Article deleted", id: article._id });

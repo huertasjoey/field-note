@@ -1,15 +1,14 @@
-const { test, before, after } = require("node:test");
-const assert = require("node:assert/strict");
-const http = require("node:http");
-const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs");
-const { MongoMemoryServer } = require("mongodb-memory-server");
+import { test, before, after } from "node:test";
+import assert from "node:assert/strict";
+import http from "node:http";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
-process.env.CLIENT_ORIGIN = "http://localhost:5173";
-const app = require("../app");
-const User = require("../models/User");
-const Article = require("../models/Article");
-const Session = require("../models/Session");
+import app from "../app.js";
+import User from "../models/User.js";
+import Article from "../models/Article.js";
+import Session from "../models/Session.js";
 
 let mongod, server, base;
 const ORIGIN = "http://localhost:5173";

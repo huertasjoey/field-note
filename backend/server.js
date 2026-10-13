@@ -1,17 +1,6 @@
-import path from "path";
-import { fileURLToPath } from "url";
-import express from "express";
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express();
-const frontendPath = path.resolve(__dirname, "../frontend/dist");
-
-require("dotenv").config();
-const app = require("./app");
-const connectDB = require("./config/db");
+import "dotenv/config"; // must stay the first import so env vars exist before app.js reads them
+import app from "./app.js";
+import connectDB from "./config/db.js";
 
 const PORT = process.env.PORT || 5000;
 

@@ -1,8 +1,8 @@
-const Subscriber = require("../models/Subscriber");
-const { HttpError } = require("../middleware/errorHandler");
-const { EMAIL_RE } = require("../utils/helpers");
+import Subscriber from "../models/Subscriber.js";
+import { HttpError } from "../middleware/errorHandler.js";
+import { EMAIL_RE } from "../utils/helpers.js";
 
-exports.subscribe = async (req, res, next) => {
+export const subscribe = async (req, res, next) => {
   try {
     const email = String(req.body?.email ?? "").trim().toLowerCase();
     if (!email || email.length > 254 || !EMAIL_RE.test(email)) {

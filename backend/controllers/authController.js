@@ -1,9 +1,9 @@
-const bcrypt = require("bcryptjs");
-const User = require("../models/User");
-const Session = require("../models/Session");
-const { HttpError } = require("../middleware/errorHandler");
-const { createSession, clearSessionCookie } = require("../middleware/auth");
-const { EMAIL_RE } = require("../utils/helpers");
+import bcrypt from "bcryptjs";
+import User from "../models/User.js";
+import Session from "../models/Session.js";
+import { HttpError } from "../middleware/errorHandler.js";
+import { createSession, clearSessionCookie } from "../middleware/auth.js";
+import { EMAIL_RE } from "../utils/helpers.js";
 
 const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -22,9 +22,9 @@ function passwordProblems(password) {
 
 const str = (v) => (typeof v === "string" ? v : "");
 
-exports.validatePassword = passwordProblems;
+export const validatePassword = passwordProblems;
 
-exports.register = asyncHandler(async (req, res) => {
+export const register = asyncHandler(async (req, res) => {
   const name = str(req.body?.name).trim();
   const email = str(req.body?.email).trim().toLowerCase();
   const password = str(req.body?.password);
@@ -48,7 +48,7 @@ exports.register = asyncHandler(async (req, res) => {
   res.status(201).json({ user: user.toPublic(), csrfToken });
 });
 
-exports.login = asyncHandler(async (req, res) => {
+export const login = asyncHandler(async (req, res) => {
   const email = str(req.body?.email).trim().toLowerCase();
   const password = str(req.body?.password);
   if (!email || !password) throw new HttpError(400, "Email and password are required");
@@ -61,13 +61,13 @@ exports.login = asyncHandler(async (req, res) => {
   res.json({ user: user.toPublic(), csrfToken });
 });
 
-exports.logout = asyncHandler(async (req, res) => {
+export const logout = asyncHandler(async (req, res) => {
   if (req.session) await Session.deleteOne({ _id: req.session._id });
   clearSessionCookie(res);
   res.json({ message: "Logged out" });
 });
 
-exports.me = (req, res) => {
+export const me = (req, res) => {
   if (!req.user) return res.json({ user: null });
   res.json({ user: req.user.toPublic(), csrfToken: req.session.csrfToken });
 };

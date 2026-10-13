@@ -1,13 +1,13 @@
 // Creates (or promotes) the initial administrator from environment variables.
 //   ADMIN_EMAIL, ADMIN_PASSWORD (required), ADMIN_NAME (optional)
 // Usage: npm run create-admin     (remove ADMIN_PASSWORD from .env afterwards)
-require("dotenv").config();
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
-const connectDB = require("./config/db");
-const User = require("./models/User");
-const { validatePassword } = require("./controllers/authController");
-const { EMAIL_RE } = require("./utils/helpers");
+import "dotenv/config";
+import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import connectDB from "./config/db.js";
+import User from "./models/User.js";
+import { validatePassword } from "./controllers/authController.js";
+import { EMAIL_RE } from "./utils/helpers.js";
 
 async function main() {
   const email = (process.env.ADMIN_EMAIL || "").trim().toLowerCase();

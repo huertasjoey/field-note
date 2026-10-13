@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 // Server-side session. Only a SHA-256 hash of the cookie token is stored, so a database leak
 // cannot be used to hijack sessions. Deleting the row (logout) invalidates the session.
@@ -9,4 +9,4 @@ const sessionSchema = new mongoose.Schema({
   expiresAt: { type: Date, required: true, index: { expires: 0 } }, // TTL: Mongo removes expired rows
 });
 
-module.exports = mongoose.model("Session", sessionSchema);
+export default mongoose.model("Session", sessionSchema);

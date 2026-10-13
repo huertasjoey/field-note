@@ -1,6 +1,6 @@
-const crypto = require("crypto");
-const Session = require("../models/Session");
-const { HttpError } = require("./errorHandler");
+import crypto from "crypto";
+import Session from "../models/Session.js";
+import { HttpError } from "./errorHandler.js";
 
 const COOKIE_NAME = "fieldnote_sid";
 const SESSION_TTL_MS = 12 * 60 * 60 * 1000; // 12 hours
@@ -89,4 +89,4 @@ function csrfProtection(allowedOrigins) {
   };
 }
 
-module.exports = { COOKIE_NAME, createSession, clearSessionCookie, loadSession, requireAuth, requireAdmin, csrfProtection };
+export { COOKIE_NAME, createSession, clearSessionCookie, loadSession, requireAuth, requireAdmin, csrfProtection };

@@ -2,10 +2,10 @@
 //   npm run promote-admin -- --list              show accounts (name, email, role)
 //   npm run promote-admin -- you@example.com     promote that account
 // Roles can only be changed here (or by create-admin.js); the web API never accepts a role from a client.
-require("dotenv").config();
-const mongoose = require("mongoose");
-const connectDB = require("./config/db");
-const User = require("./models/User");
+import "dotenv/config";
+import mongoose from "mongoose";
+import connectDB from "./config/db.js";
+import User from "./models/User.js";
 
 async function main() {
   const arg = (process.argv[2] || "").trim();

@@ -1,14 +1,14 @@
-const path = require("path");
-const fs = require("fs");
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/authRoutes");
-const { loadSession, csrfProtection } = require("./middleware/auth");
-const articleRoutes = require("./routes/articleRoutes");
-const newsletterRoutes = require("./routes/newsletterRoutes");
-const { notFound, errorHandler } = require("./middleware/errorHandler");
+import path from "path";
+import fs from "fs";
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/authRoutes.js";
+import { loadSession, csrfProtection } from "./middleware/auth.js";
+import articleRoutes from "./routes/articleRoutes.js";
+import newsletterRoutes from "./routes/newsletterRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/newsletter", newsletterRoutes);
 
 // Production: serve the built React app from this same service (same origin => no CORS/cookie issues).
-const dist = path.join(__dirname, "..", "frontend", "dist");
+const dist = path.join(import.meta.dirname, "..", "frontend", "dist");
 if (fs.existsSync(path.join(dist, "index.html"))) {
   app.use(express.static(dist, { index: false, maxAge: "1h" }));
   app.get(/^\/(?!api\/).*/, (req, res) => res.sendFile(path.join(dist, "index.html")));
@@ -46,4 +46,4 @@ if (fs.existsSync(path.join(dist, "index.html"))) {
 app.use(notFound);
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

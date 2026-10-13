@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const CATEGORIES = ["Culture", "Places", "Ideas", "Lifestyle", "Technology", "Stories"];
+export const CATEGORIES = ["Culture", "Places", "Ideas", "Lifestyle", "Technology", "Stories"];
 
 const articleSchema = new mongoose.Schema(
   {
@@ -19,5 +19,4 @@ const articleSchema = new mongoose.Schema(
 
 articleSchema.index({ createdAt: -1 });
 
-module.exports = mongoose.model("Article", articleSchema);
-module.exports.CATEGORIES = CATEGORIES;
+export default mongoose.model("Article", articleSchema);

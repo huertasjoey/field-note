@@ -1,10 +1,10 @@
 // Inserts sample articles. Safe to run repeatedly: articles are matched by slug,
 // existing ones are left untouched (so your edits are never overwritten).
-require("dotenv").config();
-const mongoose = require("mongoose");
-const connectDB = require("./config/db");
-const Article = require("./models/Article");
-const { slugify, estimateReadTime } = require("./utils/helpers");
+import "dotenv/config";
+import mongoose from "mongoose";
+import connectDB from "./config/db.js";
+import Article from "./models/Article.js";
+import { slugify, estimateReadTime } from "./utils/helpers.js";
 
 const img = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=80`;
 

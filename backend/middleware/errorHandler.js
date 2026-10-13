@@ -39,4 +39,4 @@ function errorHandler(err, req, res, next) {
   res.status(status).json({ message, ...(details ? { details } : {}) });
 }
 
-module.exports = { HttpError, notFound, errorHandler };
+export { HttpError, notFound, errorHandler };

@@ -1,7 +1,8 @@
-const router = require("express").Router();
-const ctrl = require("../controllers/articleController");
-const validateObjectId = require("../middleware/validateObjectId");
-const { requireAuth, requireAdmin } = require("../middleware/auth");
+import express from "express";
+const router = express.Router();
+import * as ctrl from "../controllers/articleController.js";
+import validateObjectId from "../middleware/validateObjectId.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 
 // The whole site requires login: reads need any signed-in user; every write (create, edit, delete, set featured) is admin-only.
 router.get("/", requireAuth, ctrl.listArticles);
@@ -11,4 +12,4 @@ router.get("/:id", requireAuth, ctrl.getArticle);
 router.put("/:id", requireAdmin, validateObjectId, ctrl.updateArticle);
 router.delete("/:id", requireAdmin, validateObjectId, ctrl.deleteArticle);
 
-module.exports = router;
+export default router;

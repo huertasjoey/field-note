@@ -1,6 +1,7 @@
-const router = require("express").Router();
-const rateLimit = require("express-rate-limit");
-const ctrl = require("../controllers/authController");
+import express from "express";
+const router = express.Router();
+import rateLimit from "express-rate-limit";
+import * as ctrl from "../controllers/authController.js";
 
 const limiter = (max) =>
   rateLimit({
@@ -16,4 +17,4 @@ router.post("/login", limiter(10), ctrl.login);
 router.post("/logout", ctrl.logout);
 router.get("/me", ctrl.me);
 
-module.exports = router;
+export default router;

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const ROLES = ["user", "admin"];
+export const ROLES = ["user", "admin"];
 
 const userSchema = new mongoose.Schema(
   {
@@ -16,5 +16,4 @@ userSchema.methods.toPublic = function toPublic() {
   return { id: this._id, name: this.name, email: this.email, role: this.role };
 };
 
-module.exports = mongoose.model("User", userSchema);
-module.exports.ROLES = ROLES;
+export default mongoose.model("User", userSchema);

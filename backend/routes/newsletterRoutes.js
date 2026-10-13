@@ -1,7 +1,8 @@
-const { requireAuth } = require("../middleware/auth");
-const router = require("express").Router();
-const { subscribe } = require("../controllers/newsletterController");
+import { requireAuth } from "../middleware/auth.js";
+import express from "express";
+const router = express.Router();
+import { subscribe } from "../controllers/newsletterController.js";
 
 router.post("/subscribe", requireAuth, subscribe);
 
-module.exports = router;
+export default router;
