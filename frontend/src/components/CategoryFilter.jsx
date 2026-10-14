@@ -11,7 +11,7 @@ function CategoryFilter({ active, onChange }) {
           type="button"
           aria-pressed={active === c}
           onClick={() => onChange(c)}
-          className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
+          className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm transition-colors ${
             active === c ? "border-brand bg-brand text-white" : "border-line bg-white hover:border-brand hover:text-brand"
           }`}
         >

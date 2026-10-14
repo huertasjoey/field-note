@@ -101,7 +101,7 @@ function Navbar() {
 
         <button
           type="button"
-          className="rounded-full p-2 hover:bg-white/15 md:hidden"
+          className="flex size-11 items-center justify-center rounded-full hover:bg-white/15 md:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="mobile-menu"

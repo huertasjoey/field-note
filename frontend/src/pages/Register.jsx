@@ -113,7 +113,7 @@ function Register() {
               value={form.password}
               onChange={set("password")}
               aria-invalid={!!errors.password}
-              aria-describedby="password-rules"
+              aria-describedby={errors.password ? "password-err password-rules" : "password-rules"}
               className={`${inputClass} pr-12`}
             />
             <button
@@ -125,7 +125,11 @@ function Register() {
               {show ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
             </button>
           </div>
-          {errors.password && <p className="mt-1 text-sm text-accent">{errors.password}</p>}
+          {errors.password && (
+            <p id="password-err" className="mt-1 text-sm text-accent">
+              {errors.password}
+            </p>
+          )}
           <ul id="password-rules" className="mt-2 space-y-0.5 text-xs">
             {rules.map((r) => (
               <li key={r.label} className={r.test(form.password) ? "text-emerald-700" : "text-muted"}>

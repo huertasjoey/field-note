@@ -103,7 +103,7 @@ function Homepage() {
                     type="button"
                     disabled={page <= 1}
                     onClick={() => setPage(page - 1)}
-                    className="inline-flex items-center gap-1 rounded-full border border-line bg-white px-4 py-2 hover:border-brand disabled:opacity-40"
+                    className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line bg-white px-4 hover:border-brand disabled:opacity-40"
                   >
                     <ArrowLeft size={14} aria-hidden="true" /> Previous
                   </button>
@@ -114,7 +114,7 @@ function Homepage() {
                     type="button"
                     disabled={page >= data.totalPages}
                     onClick={() => setPage(page + 1)}
-                    className="inline-flex items-center gap-1 rounded-full border border-line bg-white px-4 py-2 hover:border-brand disabled:opacity-40"
+                    className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line bg-white px-4 hover:border-brand disabled:opacity-40"
                   >
                     Next <ArrowRight size={14} aria-hidden="true" />
                   </button>

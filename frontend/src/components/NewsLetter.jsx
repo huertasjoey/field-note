@@ -45,12 +45,12 @@ function NewsLetter() {
             autoComplete="email"
             aria-invalid={status.type === "error"}
             aria-describedby="newsletter-status"
-            className="min-w-0 flex-1 rounded-full border border-transparent bg-white px-5 py-3 text-ink placeholder:text-stone-400"
+            className="min-w-0 flex-1 rounded-full border border-transparent bg-white px-5 py-3 text-ink placeholder:text-stone-500"
           />
           <button
             type="submit"
             disabled={status.type === "loading"}
-            className="rounded-full bg-rose-400 px-6 py-3 font-medium text-white transition-colors hover:bg-rose-500 disabled:opacity-60"
+            className="rounded-full bg-ink px-6 py-3 font-medium text-white transition-colors hover:bg-stone-700 disabled:opacity-60"
           >
             {status.type === "loading" ? "Subscribing…" : "Subscribe"}
           </button>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Eye, Pencil, Plus, Star, Trash2 } from "lucide-react";
 import { Loading, ErrorState, EmptyState } from "../components/StateMessage";
@@ -7,12 +7,42 @@ import { api } from "../lib/api";
 import { formatDate } from "../lib/format";
 
 function ConfirmDelete({ article, busy, onConfirm, onCancel }) {
+  const dialogRef = useRef(null);
+  const cancelRef = useRef(null);
+
+  // Move focus into the dialog (on the safe action), and put it back on close
+  useEffect(() => {
+    const opener = document.activeElement;
+    cancelRef.current?.focus();
+    return () => opener?.focus?.();
+  }, []);
+
+  function handleKeyDown(e) {
+    if (e.key === "Escape") {
+      onCancel();
+      return;
+    }
+    if (e.key !== "Tab") return;
+    const items = dialogRef.current.querySelectorAll("button:not(:disabled)");
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div
+        ref={dialogRef}
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="confirm-title"
+        onKeyDown={handleKeyDown}
         className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl"
       >
         <h2 id="confirm-title" className="font-serif text-xl font-bold">
@@ -22,15 +52,19 @@ function ConfirmDelete({ article, busy, onConfirm, onCancel }) {
           “{article.title}” will be permanently deleted. This cannot be undone.
         </p>
         <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onCancel} className="rounded-full border border-line px-5 py-2 text-sm hover:border-ink">
+          <button
+            ref={cancelRef}
+            type="button"
+            onClick={onCancel}
+            className="min-h-11 rounded-full border border-line px-5 text-sm hover:border-ink"
+          >
             Cancel
           </button>
           <button
             type="button"
             disabled={busy}
             onClick={onConfirm}
-            autoFocus
-            className="rounded-full bg-accent px-5 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:opacity-60"
+            className="min-h-11 rounded-full bg-accent px-5 text-sm font-medium text-white hover:bg-rose-800 disabled:opacity-60"
           >
             {busy ? "Deleting…" : "Delete"}
           </button>
@@ -132,10 +166,10 @@ function Admin() {
                         {a.category} · {a.author} · {formatDate(a.createdAt)}
                       </p>
                     </div>
-                    <div className="flex shrink-0 gap-2">
+                    <div className="flex flex-wrap gap-2 sm:shrink-0">
                       <Link
                         to={`/articles/${a._id}`}
-                        className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-sm hover:border-brand"
+                        className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line px-3 text-sm sm:min-h-9 hover:border-brand"
                       >
                         <Eye size={14} aria-hidden="true" /> View
                       </Link>
@@ -143,18 +177,18 @@ function Admin() {
                         <button
                           type="button"
                           onClick={() => handleFeature(a)}
-                          className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-sm hover:border-amber-500"
+                          className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line px-3 text-sm sm:min-h-9 hover:border-amber-500"
                         >
                           <Star size={14} aria-hidden="true" /> Feature
                         </button>
                       )}
-                      <Link to={`/admin/articles/${a._id}/edit`} className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-sm hover:border-brand">
+                      <Link to={`/admin/articles/${a._id}/edit`} className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line px-3 text-sm sm:min-h-9 hover:border-brand">
                         <Pencil size={14} aria-hidden="true" /> Edit
                       </Link>
                       <button
                         type="button"
                         onClick={() => setToDelete(a)}
-                        className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-sm text-accent hover:border-accent"
+                        className="inline-flex min-h-11 items-center gap-1 rounded-full border border-line px-3 text-sm sm:min-h-9 text-accent hover:border-accent"
                       >
                         <Trash2 size={14} aria-hidden="true" /> Delete
                       </button>

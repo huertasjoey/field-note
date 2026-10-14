@@ -7,7 +7,7 @@
   --color-line: #e4ded3;
   --color-brand: #5b21b6;
   --color-brand-dark: #4c1d95;
-  --color-accent: #e11d48;
+  --color-accent: #be123c;
   --font-serif: Georgia, "Times New Roman", serif;
 }
 
@@ -21,13 +21,29 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
   :focus-visible {
     outline: 2px solid var(--color-brand);
     outline-offset: 2px;
   }
+  /* Brand-coloured surfaces: a brand outline would be invisible there */
+  header :focus-visible,
+  #newsletter :focus-visible {
+    outline-color: #fff;
+  }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
     }
   }
 }
